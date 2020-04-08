@@ -2,19 +2,25 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const estimateRoutes = require('./routes/estimator');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
+// const  accessLogStream = fs.createWriteStream(__dirname + '/access.log', {flags: 'a'});
 
 
 
-
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(upload.any());
-app.use(function (req, res, next) {
-    console.log(req.route,req.ip);
-    next();
-});
+
+// app.use(morgan('{"remote_addr": ":remote-addr", "remote_user": ":remote-user", "date": ":date[clf]", "method": ":method", "url": ":url", "http_version": ":http-version", "status": ":status", "result_length": ":res[content-length]", "referrer": ":referrer", "user_agent": ":user-agent", "response_time": ":response-time"}', { stream: accessLogStream }));
+
+app.use(morgan(':method   :url  :status  :response-time ms', {
+    stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+}))
+
 app.use("/api/v1/on-covid-19",estimateRoutes);
 
 app.get('/',function(req,res,next){
@@ -30,6 +36,7 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 })
+
 
 
 // catch 404 and forward to error handler

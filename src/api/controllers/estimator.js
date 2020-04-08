@@ -1,6 +1,8 @@
 const estimateService = require('../services/estimator.service');
 const xml = require('xml');
 const o2x = require('object-to-xml');
+const fs = require('fs');
+const path = require('path');
 class estimator{
 
 static async estimates(req,res,next){
@@ -23,7 +25,8 @@ static async estimates(req,res,next){
        return res.status(200).json({
             ...estimates
         });
-    }else{
+    }
+        if (responseType == "xml"){
             res.set('Content-Type', 'application/xml');
             res.send(o2x({
                 '?xml version="1.0" encoding="utf-8"?': null,
@@ -36,6 +39,24 @@ static async estimates(req,res,next){
         next(error);
     }
 
+
+}
+
+static async logs(req,res,next){
+    try{
+        var appRoot = process.env.PWD
+        const filePath = path.join(__dirname,'../', 'access.log');
+        var contents = fs.readFileSync(filePath);
+        // const logs = JSON.parse(JSON.stringify(contents));
+        
+        
+       // console.log(logs);
+        return res.send(contents);
+
+    }
+    catch(error){
+        next(error);
+    }
 
 }
 

@@ -29,16 +29,16 @@ static availableBeds(totalBeds, patients) {
     return hospitalBeds;
 }
 static covid19ImpactEstimator ({ region = {
-    name,
-    avgAge,
-    avgDailyIncomeInUSD,
-    avgDailyIncomePopulation
+    name: "Africa",
+    avgAge:19.7,
+    avgDailyIncomeInUSD:5,
+    avgDailyIncomePopulation:0.71
 },
-    periodType,
-    timeToElapse,
-    reportedCases,
-    population,
-    totalHospitalBeds }) {
+    periodType="days",
+    timeToElapse=28,
+    reportedCases=254,
+    population = 66622705,
+    totalHospitalBeds = 1380614 }) {
 
 
     const currentlyInfected = reportedCases * 10;
