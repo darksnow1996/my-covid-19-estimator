@@ -1,34 +1,34 @@
+class estimatorService{
+static getDays(period, periodType = "days") {
+    switch (periodType) {
+        case "days":
+            var days = period
+            break;
+        case "months":
+            var days = period * 30;
+            break;
+        case "weeks":
+            var days = period * 7;
 
-function getDays(period,periodType = "days"){
-    switch(periodType){
-    case "days":
-        var days = period 
-        break;
-    case "months":
-        var days = period * 30;
-        break;
-    case "weeks":
-        var days = period * 7;
-        
+    }
+    return days;
 }
-return days;
-}
-function getInfectedFactor(period=28,periodType="days"){
-    const days = getDays(period,periodType);
+static getInfectedFactor(period = 28, periodType = "days") {
+    const days = this.getDays(period, periodType);
     let power = days / 3;
     const factor = Math.pow(2, power);
 
-return factor;
-    
- 
+    return factor;
+
+
 }
 
-function availableBeds(totalBeds, patients){
+static availableBeds(totalBeds, patients) {
     const available = totalBeds * 0.35;
     const hospitalBeds = available - patients;
     return hospitalBeds;
 }
-const covid19ImpactEstimator = ({ region = {
+static covid19ImpactEstimator ({ region = {
     name,
     avgAge,
     avgDailyIncomeInUSD,
@@ -38,30 +38,30 @@ const covid19ImpactEstimator = ({ region = {
     timeToElapse,
     reportedCases,
     population,
-    totalHospitalBeds }) => {
-   
+    totalHospitalBeds }) {
+
 
     const currentlyInfected = reportedCases * 10;
 
-    const  currentlyInfectedSevere = reportedCases * 50;
-    
-    const infectionsByRequestedTime =currentlyInfected * getInfectedFactor(timeToElapse, periodType);
+    const currentlyInfectedSevere = reportedCases * 50;
+
+    const infectionsByRequestedTime = currentlyInfected * this.getInfectedFactor(timeToElapse, periodType);
 
 
-    const infectionsByRequestedTimeSevere = currentlyInfectedSevere *getInfectedFactor();
+    const infectionsByRequestedTimeSevere = currentlyInfectedSevere * this.getInfectedFactor();
     const severeCasesByRequestedTime = infectionsByRequestedTime * 0.15;
     const severeCasesByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.15;
-    const hospitalBedsByRequestedTime = availableBeds(totalHospitalBeds, severeCasesByRequestedTime);
-    const hospitalBedsByRequestedTimeSevere = availableBeds(totalHospitalBeds, severeCasesByRequestedTimeSevere);
+    const hospitalBedsByRequestedTime = this.availableBeds(totalHospitalBeds, severeCasesByRequestedTime);
+    const hospitalBedsByRequestedTimeSevere = this.availableBeds(totalHospitalBeds, severeCasesByRequestedTimeSevere);
     const casesForICUByRequestedTime = infectionsByRequestedTime * 0.05;
     const casesForICUByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.05;
     const casesForVentilatorsByRequestedTime = infectionsByRequestedTime * 0.02;
     const casesForVentilatorsByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.02;
-    const dollarsInFlight = infectionsByRequestedTime * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * getDays(timeToElapse,periodType);
-    const dollarsInFlightSevere = infectionsByRequestedTimeSevere * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * getDays(timeToElapse, periodType);
+    const dollarsInFlight = infectionsByRequestedTime * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * this.getDays(timeToElapse, periodType);
+    const dollarsInFlightSevere = infectionsByRequestedTimeSevere * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * this.getDays(timeToElapse, periodType);
 
     const outputData = {
-        data:{
+        data: {
             region,
             periodType,
             timeToElapse,
@@ -79,11 +79,11 @@ const covid19ImpactEstimator = ({ region = {
             dollarsInFlight
 
         },
-        severe:{
+        severe: {
             currentlyInfected: currentlyInfectedSevere,
             infectionsByRequestedTime: infectionsByRequestedTimeSevere,
             severeCasesByRequestedTime: severeCasesByRequestedTimeSevere,
-            hospitalBedsByRequestedTime : hospitalBedsByRequestedTimeSevere,
+            hospitalBedsByRequestedTime: hospitalBedsByRequestedTimeSevere,
             casesForICUByRequestedTime: casesForICUByRequestedTimeSevere,
             casesForVentilatorsByRequestedTime: casesForVentilatorsByRequestedTimeSevere,
             dollarsInFlight: dollarsInFlightSevere
@@ -92,12 +92,11 @@ const covid19ImpactEstimator = ({ region = {
 
     return outputData;
 
-    
 
 
 
-    };
 
+}
 
-
-export default covid19ImpactEstimator;
+}
+module.exports = estimatorService;
