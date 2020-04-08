@@ -4,7 +4,7 @@
   "repository": "git@github.com:BuildforSDG-Cohort1-Assessment/covid-19-estimator-js.git",
   "license": "MIT",
   "private": false,
-  "main" : "/src/api/server.js",
+  "main" : "./src/api/server.js",
   "scripts": {
     "start": "node ./src/api/server.js"
   },
