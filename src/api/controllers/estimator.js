@@ -5,7 +5,7 @@ class estimator{
 
 static async estimates(req,res,next){
     try{
-        console.log(req.route);
+     //   console.log(req.route);
         const responseType = req.params.responseType || "json";
 
     const { region, periodType,

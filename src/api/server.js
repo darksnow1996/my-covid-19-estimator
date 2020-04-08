@@ -17,6 +17,13 @@ app.use(function (req, res, next) {
 });
 app.use("/api/v1/on-covid-19",estimateRoutes);
 
+app.get('/',function(req,res,next){
+   return res.json({
+        message: "Welcome to Oyindamola's Covid-19 estimator"
+    });
+});
+
+
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
