@@ -5,6 +5,9 @@
   "license": "MIT",
   "private": false,
   "main" : "/src/api/server.js",
+  "scripts": {
+    "start": "node ./src/api/server.js"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
@@ -25,9 +28,6 @@
     "eslint-plugin-import": "^2.20.1"
   },
   "type": "module",
-  "scripts": {
-    "start": "node ./src/api/server.js"
-  },
   "browserslist": [
     "last 1 Chrome versions"
   ]
