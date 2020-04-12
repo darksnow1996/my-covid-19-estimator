@@ -1,4 +1,8 @@
 class estimatorService{
+    static truncateDecimal(number){
+        return Math.trunc(number);
+
+    }
 static getDays(period, periodType = "days") {
     switch (periodType) {
         case "days":
@@ -45,20 +49,20 @@ static covid19ImpactEstimator ({ region = {
 
     const currentlyInfectedSevere = reportedCases * 50;
 
-    const infectionsByRequestedTime = currentlyInfected * this.getInfectedFactor(timeToElapse, periodType);
+    const infectionsByRequestedTime = this.truncateDecimal(currentlyInfected * this.getInfectedFactor(timeToElapse, periodType));
 
 
-    const infectionsByRequestedTimeSevere = currentlyInfectedSevere * this.getInfectedFactor();
-    const severeCasesByRequestedTime = infectionsByRequestedTime * 0.15;
-    const severeCasesByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.15;
-    const hospitalBedsByRequestedTime = this.availableBeds(totalHospitalBeds, severeCasesByRequestedTime);
-    const hospitalBedsByRequestedTimeSevere = this.availableBeds(totalHospitalBeds, severeCasesByRequestedTimeSevere);
-    const casesForICUByRequestedTime = infectionsByRequestedTime * 0.05;
-    const casesForICUByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.05;
-    const casesForVentilatorsByRequestedTime = infectionsByRequestedTime * 0.02;
-    const casesForVentilatorsByRequestedTimeSevere = infectionsByRequestedTimeSevere * 0.02;
-    const dollarsInFlight = infectionsByRequestedTime * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * this.getDays(timeToElapse, periodType);
-    const dollarsInFlightSevere = infectionsByRequestedTimeSevere * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD * this.getDays(timeToElapse, periodType);
+    const infectionsByRequestedTimeSevere = this.truncateDecimal(currentlyInfectedSevere * this.getInfectedFactor());
+    const severeCasesByRequestedTime = this.truncateDecimal(infectionsByRequestedTime * 0.15);
+    const severeCasesByRequestedTimeSevere = this.truncateDecimal(infectionsByRequestedTimeSevere * 0.15);
+    const hospitalBedsByRequestedTime = this.truncateDecimal(this.availableBeds(totalHospitalBeds, severeCasesByRequestedTime));
+    const hospitalBedsByRequestedTimeSevere = this.truncateDecimal(this.availableBeds(totalHospitalBeds, severeCasesByRequestedTimeSevere));
+    const casesForICUByRequestedTime = this.truncateDecimal(infectionsByRequestedTime * 0.05);
+    const casesForICUByRequestedTimeSevere = this.truncateDecimal(infectionsByRequestedTimeSevere * 0.05);
+    const casesForVentilatorsByRequestedTime = this.truncateDecimal(infectionsByRequestedTime * 0.02);
+    const casesForVentilatorsByRequestedTimeSevere = this.truncateDecimal(infectionsByRequestedTimeSevere * 0.02);
+    const dollarsInFlight = this.truncateDecimal(infectionsByRequestedTime * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD / this.getDays(timeToElapse, periodType));
+    const dollarsInFlightSevere = this.truncateDecimal(infectionsByRequestedTimeSevere * region.avgDailyIncomePopulation * region.avgDailyIncomeInUSD / this.getDays(timeToElapse, periodType));
 
     const outputData = {
         data: {
