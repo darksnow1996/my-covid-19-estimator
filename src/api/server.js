@@ -21,6 +21,12 @@ app.use(morgan(':method   :url  :status  :response-time ms', {
     stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 }))
 
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+})
 app.use("/api/v1/on-covid-19",estimateRoutes);
 
 app.get('/',function(req,res,next){
@@ -30,12 +36,7 @@ app.get('/',function(req,res,next){
 });
 
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-})
+
 
 
 
